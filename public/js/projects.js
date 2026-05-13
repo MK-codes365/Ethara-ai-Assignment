@@ -18,18 +18,26 @@ async function loadProjects() {
         </div>`;
       return;
     }
-    container.innerHTML = projects.map(p => {
+    container.innerHTML = projects.map((p, i) => {
       const myRole = p.members.find(m => m.userId._id === user._id)?.role || 'Member';
+      const initial = p.name.charAt(0).toUpperCase();
       return `
         <div class="card project-card" onclick="window.location.href='/project.html?id=${p._id}'">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div class="project-avatar">${initial}</div>
+          <div class="project-header">
             <h3>${escHtml(p.name)}</h3>
             <span class="badge badge-${myRole.toLowerCase()}">${myRole}</span>
           </div>
           <p class="project-desc">${escHtml(p.description || 'No description')}</p>
-          <div class="project-meta">
-            <span>👥 ${p.members.length} member${p.members.length !== 1 ? 's' : ''}</span>
-            <span>📅 ${formatDate(p.createdAt)}</span>
+          <div class="project-stats-row">
+            <div class="project-stat">
+              <div class="project-stat-dot" style="background:var(--accent)"></div>
+              👥 ${p.members.length} member${p.members.length !== 1 ? 's' : ''}
+            </div>
+            <div class="project-stat">
+              <div class="project-stat-dot" style="background:var(--success)"></div>
+              📅 ${formatDate(p.createdAt)}
+            </div>
           </div>
         </div>`;
     }).join('');

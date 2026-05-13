@@ -4,8 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Team Task Manager - Sign in to manage your projects and tasks">
-  <title>Login — Team Task Manager</title>
+  <title>Login — TaskFlow</title>
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .auth-features {
+      display:flex; gap:24px; margin-top:32px; justify-content:center; flex-wrap:wrap;
+    }
+    .auth-feature {
+      display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-muted);
+    }
+    .auth-feature-icon {
+      width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+      font-size:14px; flex-shrink:0;
+    }
+    .auth-feature-icon.purple { background:rgba(99,102,241,0.15); }
+    .auth-feature-icon.blue { background:rgba(59,130,246,0.15); }
+    .auth-feature-icon.green { background:rgba(34,197,94,0.15); }
+    .auth-divider {
+      display:flex; align-items:center; gap:12px; margin:20px 0 8px;
+      font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content:''; flex:1; height:1px; background:var(--border);
+    }
+    .password-field { position:relative; }
+    .password-toggle {
+      position:absolute; right:14px; top:50%; transform:translateY(-50%);
+      background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:16px;
+      padding:4px; transition:color .2s;
+    }
+    .password-toggle:hover { color:var(--text-primary); }
+  </style>
 </head>
 <body>
   <div class="auth-page">
@@ -22,14 +51,17 @@
         <!-- Login Form -->
         <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
           <div class="form-group">
-            <label for="loginEmail">Email</label>
+            <label for="loginEmail">Email Address</label>
             <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com" required>
           </div>
           <div class="form-group">
             <label for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required>
+            <div class="password-field">
+              <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required>
+              <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">👁</button>
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary" id="loginBtn">Sign In</button>
+          <button type="submit" class="btn btn-primary" id="loginBtn">Sign In →</button>
         </form>
         <!-- Signup Form -->
         <form id="signupForm" class="auth-form" onsubmit="handleSignup(event)">
@@ -38,19 +70,35 @@
             <input type="text" id="signupName" class="form-input" placeholder="John Doe" required>
           </div>
           <div class="form-group">
-            <label for="signupEmail">Email</label>
+            <label for="signupEmail">Email Address</label>
             <input type="email" id="signupEmail" class="form-input" placeholder="you@example.com" required>
           </div>
           <div class="form-group">
             <label for="signupPassword">Password</label>
-            <input type="password" id="signupPassword" class="form-input" placeholder="Min 6 characters" required minlength="6">
+            <div class="password-field">
+              <input type="password" id="signupPassword" class="form-input" placeholder="Min 6 characters" required minlength="6">
+              <button type="button" class="password-toggle" onclick="togglePassword('signupPassword', this)">👁</button>
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary" id="signupBtn">Create Account</button>
+          <button type="submit" class="btn btn-primary" id="signupBtn">Create Account →</button>
         </form>
+        <div class="auth-divider">or</div>
+        <div class="auth-features">
+          <div class="auth-feature"><div class="auth-feature-icon purple">📋</div>Kanban Boards</div>
+          <div class="auth-feature"><div class="auth-feature-icon blue">👥</div>Team Roles</div>
+          <div class="auth-feature"><div class="auth-feature-icon green">📊</div>Analytics</div>
+        </div>
       </div>
     </div>
   </div>
   <script src="/js/api.js"></script>
   <script src="/js/auth.js"></script>
+  <script>
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+      else { input.type = 'password'; btn.textContent = '👁'; }
+    }
+  </script>
 </body>
 </html>

@@ -41,6 +41,8 @@ async function loadDashboard() {
     // Overdue section
     if (stats.overdueTasks.length > 0) {
       document.getElementById('overdueSection').style.display = 'block';
+      const overdueCountEl = document.getElementById('overdueCount');
+      if (overdueCountEl) overdueCountEl.textContent = stats.overdueTasks.length;
       document.getElementById('overdueList').innerHTML = stats.overdueTasks.map(t => `
         <div class="overdue-item">
           <div>
