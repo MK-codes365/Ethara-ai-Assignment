@@ -1,175 +1,103 @@
-================================================================================
-                    TASKFLOW - TEAM TASK MANAGER
-================================================================================
+TaskFlow - Team Task Manager
+============================
 
-Live Demo:  https://mukut-task-manager.up.railway.app
-GitHub:     https://github.com/MK-codes365/Ethara-ai-Assignment
+Live URL: https://mukut-task-manager.up.railway.app
+GitHub:   https://github.com/MK-codes365/Ethara-ai-Assignment
 
-================================================================================
-                           ABOUT THE PROJECT
-================================================================================
 
-TaskFlow is a full-stack collaborative task management web application where 
-teams can create projects, assign tasks, and track progress with role-based 
-access control (RBAC).
+What is this?
+-------------
+This is a team task management app I built for the Ethara AI internship assignment.
+It lets teams create projects, add members, assign tasks, and track everything
+on a kanban board. There's also a dashboard that shows stats like how many tasks
+are done, in progress, or overdue.
 
-================================================================================
-                            TECH STACK
-================================================================================
+The whole thing runs on Node.js with Express for the backend, MongoDB for storing
+data, and plain HTML/CSS/JS on the frontend. No React or anything — just vanilla JS.
+I deployed it on Railway so you can try it out using the link above.
 
-  Backend:     Node.js + Express.js
-  Database:    MongoDB Atlas (Mongoose ODM)
-  Auth:        JWT (jsonwebtoken) + bcryptjs
-  Frontend:    HTML5, CSS3, Vanilla JavaScript
-  Deployment:  Railway (CI/CD from GitHub)
-  Design:      Glassmorphism dark theme with animated gradients
 
-================================================================================
-                             FEATURES
-================================================================================
+Tech I used
+-----------
+- Node.js & Express.js for the server
+- MongoDB Atlas with Mongoose for the database
+- JWT for login/auth, bcryptjs for hashing passwords
+- HTML, CSS, JS for the frontend (dark theme with glassmorphism style)
+- Railway for hosting
 
-  [1] User Authentication
-      - Signup and Login with JWT token-based authentication
-      - Passwords securely hashed with bcryptjs
 
-  [2] Project Management
-      - Create new projects
-      - Add and remove team members by email
-      - Each project has its own team and task board
+What it can do
+--------------
+- Sign up / Log in (JWT based auth)
+- Create projects and invite team members by email
+- Kanban board with 3 columns: To Do, In Progress, Done
+- Create tasks, set priority (Low/Medium/High), assign to members, set due dates
+- Dashboard with bar charts showing task stats and overdue alerts
+- Role based access — Admins can do everything, Members can only update their own tasks
+- Mobile responsive
 
-  [3] Task Management (Kanban Board)
-      - Visual board with 3 columns: To Do, In Progress, Done
-      - Create, edit, assign, and delete tasks
-      - Set priority (Low, Medium, High) and due dates
 
-  [4] Dashboard with Analytics
-      - Total tasks, projects, completed, and overdue counts
-      - Bar charts showing tasks by status and per project
-      - Overdue task alerts with due dates
+How the roles work
+------------------
+Admins can:
+  - Create and delete tasks
+  - Edit any field on any task
+  - Add or remove team members
 
-  [5] Role-Based Access Control (RBAC)
-      - Admin: Full control (create/delete tasks, manage members)
-      - Member: Can only view and update status of assigned tasks
+Members can:
+  - View tasks assigned to them
+  - Update the status of their own tasks (like moving from To Do to In Progress)
+  - They can't delete tasks or manage members
 
-  [6] Responsive Design
-      - Works on desktop, tablet, and mobile devices
-      - Premium glassmorphism UI with dark theme
 
-================================================================================
-                         PROJECT STRUCTURE
-================================================================================
+Project files
+-------------
+server.js              -> main entry point, sets up Express
+config/database.js     -> connects to MongoDB
+models/                -> User, Project, Task schemas
+middleware/            -> auth check (JWT) and role check (Admin/Member)
+controllers/           -> all the logic for auth, projects, tasks, dashboard
+routes/                -> API route definitions
+public/                -> frontend files (HTML pages, CSS, JS)
 
-  Team-Task-Manager/
-  |
-  |-- server.js                   Express entry point
-  |-- config/
-  |   |-- database.js             MongoDB connection
-  |
-  |-- models/
-  |   |-- User.js                 User schema (name, email, password)
-  |   |-- Project.js              Project schema (name, members, roles)
-  |   |-- Task.js                 Task schema (title, status, priority)
-  |
-  |-- middleware/
-  |   |-- authMiddleware.js       JWT token verification
-  |   |-- roleMiddleware.js       Role-based access (Admin/Member)
-  |
-  |-- controllers/
-  |   |-- authController.js       Signup, Login, Profile
-  |   |-- projectController.js    CRUD + member management
-  |   |-- taskController.js       CRUD with role restrictions
-  |   |-- dashboardController.js  Aggregated stats & charts
-  |
-  |-- routes/
-  |   |-- authRoutes.js
-  |   |-- projectRoutes.js
-  |   |-- taskRoutes.js
-  |   |-- dashboardRoutes.js
-  |
-  |-- public/                     Frontend (served as static files)
-      |-- index.html              Dashboard page
-      |-- login.html              Auth page (Sign In / Sign Up)
-      |-- projects.html           Projects listing
-      |-- project.html            Kanban board + team panel
-      |-- css/style.css           Complete design system
-      |-- js/                     Client-side JavaScript
 
-================================================================================
-                          API ENDPOINTS
-================================================================================
+API routes
+----------
+POST   /api/auth/signup              - register
+POST   /api/auth/login               - login, get token
+GET    /api/auth/me                  - get logged in user
 
-  AUTH
-  ----
-  POST   /api/auth/signup                     Register new user
-  POST   /api/auth/login                      Login (returns JWT)
-  GET    /api/auth/me                         Get current user
+POST   /api/projects                 - create a project
+GET    /api/projects                 - get all my projects
+GET    /api/projects/:id             - get one project
+POST   /api/projects/:id/members     - add a member (admin only)
+DELETE /api/projects/:id/members/:uid - remove a member (admin only)
 
-  PROJECTS
-  --------
-  POST   /api/projects                        Create project
-  GET    /api/projects                        List my projects
-  GET    /api/projects/:id                    Get project details
-  POST   /api/projects/:id/members            Add member (Admin only)
-  DELETE /api/projects/:id/members/:userId    Remove member (Admin only)
+POST   /api/projects/:id/tasks       - create task (admin only)
+GET    /api/projects/:id/tasks       - list tasks
+PUT    /api/projects/:id/tasks/:tid  - update a task
+DELETE /api/projects/:id/tasks/:tid  - delete task (admin only)
 
-  TASKS
-  -----
-  POST   /api/projects/:id/tasks              Create task (Admin only)
-  GET    /api/projects/:id/tasks              List tasks
-  PUT    /api/projects/:id/tasks/:taskId      Update task
-  DELETE /api/projects/:id/tasks/:taskId      Delete task (Admin only)
+GET    /api/dashboard/stats          - get dashboard numbers
 
-  DASHBOARD
-  ---------
-  GET    /api/dashboard/stats                 Get dashboard stats
 
-================================================================================
-                       ROLE PERMISSIONS (RBAC)
-================================================================================
+How to run it locally
+---------------------
+1. Clone the repo
+   git clone https://github.com/MK-codes365/Ethara-ai-Assignment.git
 
-  Action                  | Admin    | Member
-  ------------------------|----------|------------------
-  Create/Delete tasks     | Yes      | No
-  Edit all task fields    | Yes      | No
-  Update task status      | Yes      | Yes (own tasks)
-  Add/Remove members      | Yes      | No
-  View project tasks      | Yes      | Yes (assigned)
+2. Install packages
+   npm install
 
-================================================================================
-                      SETUP & RUN LOCALLY
-================================================================================
+3. Make a .env file with:
+   MONGODB_URI=your_mongodb_atlas_connection_string
+   JWT_SECRET=some_secret_key
+   PORT=3000
 
-  Prerequisites:
-    - Node.js 18+
-    - MongoDB Atlas account (free tier)
+4. Run it
+   npm run dev
 
-  Steps:
+5. Go to http://localhost:3000
 
-  1. Clone the repository
-     git clone https://github.com/MK-codes365/Ethara-ai-Assignment.git
-     cd Ethara-ai-Assignment
 
-  2. Install dependencies
-     npm install
-
-  3. Create .env file (copy from .env.example)
-     MONGODB_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/team-task-manager
-     JWT_SECRET=your_secret_key_here
-     PORT=3000
-
-  4. Start the server
-     npm run dev
-
-  5. Open http://localhost:3000 in your browser
-
-================================================================================
-                           LICENSE
-================================================================================
-
-  MIT License
-
-================================================================================
-
-  Made with love by Mukut Kumar
-
-================================================================================
+- Mukut Kumar
