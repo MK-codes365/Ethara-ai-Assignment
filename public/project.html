@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Project tasks and team management">
+  <title>Project — TaskFlow</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">TaskFlow</div>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Dashboard</a>
+      <a href="/projects.html" class="nav-link">Projects</a>
+    </div>
+    <div class="nav-user">
+      <div class="nav-avatar" id="navAvatar"></div>
+      <span class="nav-username" id="navName"></span>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="page-container fade-in">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <h1 id="projectTitle">Loading...</h1>
+        <p id="projectDesc"></p>
+      </div>
+      <div id="adminActions" style="display:none">
+        <button class="btn btn-primary" onclick="openTaskModal()">+ Add Task</button>
+      </div>
+    </div>
+
+    <div class="project-layout">
+      <!-- Main: Task Board -->
+      <div class="main-area">
+        <div class="task-columns" id="taskBoard">
+          <div class="task-column"><h3>📋 To Do <span class="count" id="todoCount">0</span></h3><div id="todoTasks"></div></div>
+          <div class="task-column"><h3>🔄 In Progress <span class="count" id="progressCount">0</span></h3><div id="progressTasks"></div></div>
+          <div class="task-column"><h3>✅ Done <span class="count" id="doneCount">0</span></h3><div id="doneTasks"></div></div>
+        </div>
+      </div>
+      <!-- Side: Members -->
+      <div class="side-panel">
+        <div class="card">
+          <div class="section-header">
+            <h2 style="font-size:16px">Team</h2>
+            <button class="btn btn-secondary btn-sm" id="addMemberBtn" style="display:none" onclick="openMemberModal()">+ Add</button>
+          </div>
+          <div class="members-list" id="membersList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create/Edit Task Modal -->
+  <div class="modal-overlay" id="taskModal">
+    <div class="modal">
+      <h2 id="taskModalTitle">Create Task</h2>
+      <form onsubmit="handleTaskSubmit(event)">
+        <input type="hidden" id="editTaskId">
+        <div class="form-group">
+          <label for="taskTitle">Title</label>
+          <input type="text" id="taskTitle" class="form-input" placeholder="Task title" required>
+        </div>
+        <div class="form-group">
+          <label for="taskDesc">Description</label>
+          <textarea id="taskDesc" class="form-input" placeholder="Task details"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="taskAssignee">Assign To</label>
+          <select id="taskAssignee" class="form-select"><option value="">Unassigned</option></select>
+        </div>
+        <div class="form-group">
+          <label for="taskPriority">Priority</label>
+          <select id="taskPriority" class="form-select">
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="taskStatus">Status</label>
+          <select id="taskStatus" class="form-select">
+            <option value="To Do">To Do</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Done">Done</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="taskDue">Due Date</label>
+          <input type="date" id="taskDue" class="form-input">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeTaskModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="taskSubmitBtn">Create Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Member Modal -->
+  <div class="modal-overlay" id="memberModal">
+    <div class="modal">
+      <h2>Add Team Member</h2>
+      <form onsubmit="handleAddMember(event)">
+        <div class="form-group">
+          <label for="memberEmail">User Email</label>
+          <input type="email" id="memberEmail" class="form-input" placeholder="member@example.com" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeMemberModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/project.js"></script>
+</body>
+</html>

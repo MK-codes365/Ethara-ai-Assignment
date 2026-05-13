@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage your projects in Team Task Manager">
+  <title>Projects — TaskFlow</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">TaskFlow</div>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Dashboard</a>
+      <a href="/projects.html" class="nav-link active">Projects</a>
+    </div>
+    <div class="nav-user">
+      <div class="nav-avatar" id="navAvatar"></div>
+      <span class="nav-username" id="navName"></span>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="page-container fade-in">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between">
+      <div><h1>Projects</h1><p>Your projects and teams</p></div>
+      <button class="btn btn-primary" onclick="openCreateModal()">+ New Project</button>
+    </div>
+    <div class="card-grid" id="projectsList"><div class="loading">Loading projects...</div></div>
+  </div>
+
+  <!-- Create Project Modal -->
+  <div class="modal-overlay" id="createModal">
+    <div class="modal">
+      <h2>Create New Project</h2>
+      <form onsubmit="handleCreateProject(event)">
+        <div class="form-group">
+          <label for="projectName">Project Name</label>
+          <input type="text" id="projectName" class="form-input" placeholder="My awesome project" required>
+        </div>
+        <div class="form-group">
+          <label for="projectDesc">Description (optional)</label>
+          <textarea id="projectDesc" class="form-input" placeholder="What is this project about?"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeCreateModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="createBtn">Create Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/projects.js"></script>
+</body>
+</html>
